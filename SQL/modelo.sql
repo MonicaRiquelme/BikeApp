@@ -1,29 +1,10 @@
--- 
+﻿-- 
 -- Modelo de base de datos para PostgreSQL
 --
 
 BEGIN TRANSACTION;
 
---
--- Usuarios
--- Esta tabla es para personalización
---
-DROP TABLE IF EXISTS usuarios CASCADE;
-CREATE TABLE usuarios (
-    pk bigserial NOT NULL,
-    nombres varchar(255),
-    apellidos varchar(255),
-    fecha_nacimiento date,
-    genero int NOT NULL DEFAULT '0',
-    facebook varchar(255),
-    email varchar(255),
-    password varchar(255),
-    UNIQUE (email),
-    PRIMARY KEY (pk)
-);
 
-
---
 -- Tipo de Comercio
 -- Mecanismo para clasificar los comercios
 -- 
@@ -71,32 +52,18 @@ CREATE TABLE tiendas (
     PRIMARY KEY (pk)
 );
 
+--
+--Tabla para ingreso de usuarios a través de Facebook
+--
 
---
--- Roles
--- Roles genérico para backend
---
-DROP TABLE IF EXISTS roles CASCADE;
-CREATE TABLE roles (
-        pk serial NOT NULL,
-        nombre varchar(255) NOT NULL,
-        descripcion text,
-        UNIQUE(nombre),
-        PRIMARY KEY (pk)
+DROP TABLE IF EXISTS usuarios CASCADE;
+CREATE TABLE usuarios (
+    pk bigserial NOT NULL,
+    fbk_token NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY (pk)
 );
 
 
---
--- Roles Usuarios
---
-DROP TABLE IF EXISTS roles_usuarios CASCADE;
-CREATE TABLE roles_usuarios (
-        pk bigserial NOT NULL,
-        usuario_fk int NOT NULL REFERENCES usuarios(pk) ON UPDATE CASCADE ON DELETE CASCADE,
-        rol_fk int NOT NULL REFERENCES roles(pk) ON UPDATE CASCADE ON DELETE CASCADE,
-        UNIQUE (usuario_fk, rol_fk),
-        PRIMARY KEY (pk)
-);
 
 -- Instalar cómo super usuario la extensión:
 -- CREATE EXTENSION cube;
